@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "IMDB FIle Info Extension",
+  "name": "TMDB FIle Info Extension",
   "description": "Base Level Extension",
   "version": "1.0",
   "action": {
-    "default_popup": "imdb-info.html",
-    "default_icon": "imdb_icon.png"
+    "default_popup": "tmdb-info.html",
+    "default_icon": "tmdb_icon.png"
   },
   "permissions": [
     "activeTab",
