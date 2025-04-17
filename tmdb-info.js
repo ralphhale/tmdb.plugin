@@ -21,7 +21,6 @@ chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
             let title = data['Title'];
             let year = data['Year'];
 
-            let tmdbId = 4;
             let tmdbFileName = `${title} (${year}) [tmdbid-${tmdbId}]`;
 
             tmdbFileNameElement.innerHTML = tmdbFileName;
