@@ -1,14 +1,13 @@
-chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
+export async function getMovieInfoAsync(url) {
     let apiUrl = 'http://www.omdbapi.com?apikey=feaf3386';
-    let tmdbMovieName = getTmdbMovieName(tabs[0].url);
-    let tmdbId =  getTmdbId(tabs[0].url);
-    let tmdbFileNameElement = document.querySelector('#tmdbFileName');
+    let tmdbMovieName = getMovieName(url);
+    let tmdbId = getMovieId(url);
 
     if (tmdbMovieName && tmdbId) {
         // ex: http://www.omdbapi.com/?t=the+hunt+for+red+october
         let movieUrl = `${apiUrl}&t=${tmdbMovieName}`;
 
-        fetch(movieUrl)
+        return fetch(movieUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -23,15 +22,24 @@ chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
 
             let tmdbFileName = `${title} (${year}) [tmdbid-${tmdbId}]`;
 
-            tmdbFileNameElement.innerHTML = tmdbFileName;
+            let response = {
+                title: title,
+                year: year,
+                id: tmdbId,
+                fileName: tmdbFileName
+            };
+
+            return response;
         })
         .catch(error => {
-            tmdbFileNameElement.innerHTML = error;
+           return {
+                error: error
+           }
         });
     }
-});
+}
 
-function getTmdbMovieName(url) {
+export function getMovieName(url) {
     // eg: https://www.themoviedb.org/movie/1669-the-hunt-for-red-october
     let urlParts = url.split('/');
     let idAndName = urlParts[urlParts.length-1]; 
@@ -42,7 +50,7 @@ function getTmdbMovieName(url) {
     return tmdbName;  
 }
 
-function getTmdbId(url) {
+export function getMovieId(url) {
     // eg: https://www.themoviedb.org/movie/1669-the-hunt-for-red-october
     let urlParts = url.split('/');
     let idAndName = urlParts[urlParts.length-1]; 
@@ -50,11 +58,4 @@ function getTmdbId(url) {
     let tmdbId = idAndNameParts[0];
 
     return tmdbId;  
-}
-
-function copyToClipboard() {
-    let tmdbFileNameElement = document.querySelector('#tmdbFileName');
-    let tmdbFileName = tmdbFileNameElement.innerHTML;
-
-    navigator.clipboard.writeText(tmdbFileName);
 }

@@ -14,5 +14,12 @@
   "background": {
     "service_worker": "service_worker.js",
     "type": "module"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["tmdb-chrome.js"],
+      "type": "module"
+    }
+  ]
 }
